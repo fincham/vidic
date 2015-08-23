@@ -9,9 +9,9 @@
 .global _start
 .type _start, @function
 _start:
-	movl $early_stack_top, %esp # set up the mini stack
+    movl $early_stack_top, %esp # set up the mini stack
     call _init # call the global constructors
-	call main # call the kernel's main function
+    call main # call the kernel's main function
 
 # set up a 32k stack for early boot
 .section .early_stack, "aw", @nobits
