@@ -11,7 +11,7 @@ gdt_pointer_t gdt;
 
 /* write a byte to an IO port */
 void outb(unsigned int port, unsigned char byte) {
-   __asm__("outb %%al, %%dx" : : "d" (port), "a" (byte));
+   __asm__ volatile ("outb %%al, %%dx" : : "d" (port), "a" (byte));
 }
 
 /* halt the CPU in a way that hopefully doesn't cause it to catch fire */
