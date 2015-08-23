@@ -63,6 +63,7 @@ void vga_move_cursor(uint8_t column, uint8_t row) {
     outb(0x3D5, (unsigned char )((vga_cursor_memory_index() >> 8) & 0xFF));
  }
 
+/* clear the terminal and move the cursor back to the top left */
 void terminal_clear() {
     for (uint8_t row = 0; row < VGA_HEIGHT; row++) {
         for (uint8_t column = 0; column < VGA_WIDTH; column++) {
@@ -72,6 +73,7 @@ void terminal_clear() {
     vga_move_cursor(0, 0);
 }
 
+/* write a null terminated string at the current cursor position. handles \n for newlines. */
 void terminal_write(char *string) {
     for (size_t index = 0; string[index] != 0; index++) {
         if (string[index] == '\n') {
