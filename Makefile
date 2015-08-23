@@ -1,3 +1,5 @@
+# This makefile needs a lot of work.
+
 CC=~/opt/cross-i686/bin/i686-elf-gcc
 
 build/kernel/kernel: $(shell find include/kernel) $(shell find src/kernel) $(shell find include/klegit) $(shell find src/klegit)
@@ -40,7 +42,7 @@ build/kernel/kernel: $(shell find include/kernel) $(shell find src/kernel) $(she
 clean: 
 	find build -type f -delete
 
-# run qemu with the built kernel
+# build an iso for testing with an emulator
 build/iso: build/kernel/kernel
 	cp build/kernel/kernel iso/boot
 	genisoimage -R \
@@ -54,8 +56,8 @@ build/iso: build/kernel/kernel
 		-o build/iso \
 		iso
 
+# run test iso with either qemu or bochs
 emu: build/iso
-	# run with either qemu or bochs
 	# qemu example: qemu-system-i386 -monitor stdio -d int,cpu_reset -cdrom build/iso -boot d
 	bochs -f bochsrc -q
 
