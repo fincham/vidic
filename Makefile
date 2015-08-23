@@ -41,6 +41,7 @@ build/kernel/kernel: $(shell find include/kernel) $(shell find src/kernel) $(she
 # remove all build files
 clean: 
 	find build -type f -delete
+	rm -f iso/boot/kernel
 
 # build an iso for testing with an emulator
 build/iso: build/kernel/kernel

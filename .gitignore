@@ -33,4 +33,5 @@
 
 # OS-specific build dirs and debugging logs from bochs
 build/*
+iso/boot/kernel
 bochs.log
