@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+# OS-specific build dirs and debugging logs from bochs
+build/*
+bochs.log
