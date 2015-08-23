@@ -45,6 +45,11 @@ gdt_entry_t gdt_entry(uint32_t base_address, uint32_t limit_address, uint8_t acc
 
 /* load the gdtr register with the location of the gdt_pointer, then set the segmentation registers to match the new GDT layout */
 void switch_to_gdt(gdt_pointer_t *gdt) {
+    /*
+    0x08 = the first entry in the GDT
+    0x10 = the second entry
+    */
+
     __asm__ goto (
         "lgdt (%0)\n\t"
         "jmp $0x08, $%l1" /* this jump sets cs implicitly */
