@@ -9,6 +9,8 @@ Source directories
 * `kernel` containing the kernel proper
 * `klegit` contains the minimal libc for the kernel (may be removed / merged with legit)
 * `legit` contains the source to Legit C, our special libc
+* `iso` is the basic filesystem used to build the test ISO
+* `sysroot` is where the header files etc are placed for gcc to find
 
 Build environment
 =================
