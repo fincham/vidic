@@ -6,9 +6,9 @@ This project has been ongoing since 2003 or so. The source has been lost and rew
 Source directories
 ==================
 
-# `kernel` containing the kernel proper
-# `klegit` contains the minimal libc for the kernel (may be removed / merged with legit)
-# `legit` contains the source to Legit C, our special libc
+* `kernel` containing the kernel proper
+* `klegit` contains the minimal libc for the kernel (may be removed / merged with legit)
+* `legit` contains the source to Legit C, our special libc
 
 Build environment
 =================
