@@ -18,11 +18,11 @@ void outb(unsigned int port, unsigned char byte) {
 void halt() {
     terminal_write("Halting CPU.");
 
-    __asm__("cli");
+    __asm__ volatile ("cli");
 
     /* call hlt forever. the first call should halt the CPU indefinitely as interrupts are off, but just in case... */
     while (true) {
-        __asm__("hlt");
+        __asm__ volatile ("hlt");
     }
 }
 
