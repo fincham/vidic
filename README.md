@@ -18,8 +18,8 @@ For now, an i686-elf cross gcc and binutils are required to build the kernel. Th
 Common
 ------
 
-  export CROSS_PREFIX=~/opt/cross-i686
-  mkdir -p "${CROSS_PREFIX}"
+    export CROSS_PREFIX=~/opt/cross-i686
+    mkdir -p "${CROSS_PREFIX}"
 
 binutils
 --------
