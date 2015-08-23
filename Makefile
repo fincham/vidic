@@ -16,10 +16,10 @@ build/kernel/kernel: $(shell find include/kernel) $(shell find src/kernel) $(she
 
 	# build klegit
 	$(CC) -ffreestanding -std=c11 -Wall -Wextra -Werror -c -Iinclude -o build/klegit/string.o src/klegit/string.c
+	$(CC) -ffreestanding -std=c11 -Wall -Wextra -Werror -c -Iinclude -o build/klegit/mini-printf.o src/klegit/mini-printf.c 
 
 	# build kernel drivers
 	$(CC) -ffreestanding -std=c11 -Wall -Wextra -Werror -c -Iinclude -o build/kernel/intel.o src/kernel/intel.c 
-	$(CC) -ffreestanding -std=c11 -Wall -Wextra -Werror -c -Iinclude -o build/kernel/mini-printf.o src/kernel/mini-printf.c 
 	$(CC) -ffreestanding -std=c11 -Wall -Wextra -Werror -c -Iinclude -o build/kernel/terminal.o src/kernel/terminal.c 
 
 	# build kernel

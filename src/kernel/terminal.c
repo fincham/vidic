@@ -2,8 +2,7 @@
 #include <stdint.h>
 
 #include <kernel/intel.h>
-#include <kernel/mini-printf.h>
-#include <klegit/string.h>
+#include <klegit/mini-printf.h>
 
 static const size_t VGA_HEIGHT = 25;
 static const size_t VGA_WIDTH = 80;
