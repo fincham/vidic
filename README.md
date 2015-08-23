@@ -24,35 +24,35 @@ Common
 binutils
 --------
 
-  apt-get source binutils
-  cd binutils-2.25
+    apt-get source binutils
+    cd binutils-2.25
 
-  mkdir build
-  cd build/
-  ../configure --target=i686-elf --prefix="${CROSS_PREFIX}" --with-sysroot --disable-nls --disable-werror
-  make
-  make install
+    mkdir build
+    cd build/
+    ../configure --target=i686-elf --prefix="${CROSS_PREFIX}" --with-sysroot --disable-nls --disable-werror
+    make
+    make install
 
-  export PATH="${CROSS_PREFIX}/bin:$PATH"
+    export PATH="${CROSS_PREFIX}/bin:$PATH"
 
 gcc
 ---
 
-  aptitude install libgmp3-dev libmpfr-dev libmpc-dev 
-  apt-get source gcc-4.9
-  cd gcc-4.9-4.9.2
+    aptitude install libgmp3-dev libmpfr-dev libmpc-dev 
+    apt-get source gcc-4.9
+    cd gcc-4.9-4.9.2
 
-  tar xfv gcc-4.9.2-dfsg.tar.xz
-  cd gcc-4.9.2
-  patch -p2 < ../../debian/patches/gcc-gfdl-build.diff # disable building some of the docs that don't work on debian
+    tar xfv gcc-4.9.2-dfsg.tar.xz
+    cd gcc-4.9.2
+    patch -p2 < ../../debian/patches/gcc-gfdl-build.diff # disable building some of the docs that don't work on debian
 
-  mkdir build
-  cd build/
-  ../configure --target=i686-elf --prefix=$CROSS_PREFIX --enable-languages="c,c++" --disable-nls --without-headers 
-  make all-gcc
-  make all-target-libgcc
-  make install-gcc
-  make install-target-libgcc
+    mkdir build
+    cd build/
+    ../configure --target=i686-elf --prefix=$CROSS_PREFIX --enable-languages="c,c++" --disable-nls --without-headers 
+    make all-gcc
+    make all-target-libgcc
+    make install-gcc
+    make install-target-libgcc
 
 Building
 ========
