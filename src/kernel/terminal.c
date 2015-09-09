@@ -8,8 +8,8 @@ static const size_t VGA_HEIGHT = 25;
 static const size_t VGA_WIDTH = 80;
 static const size_t HEXDUMP_WIDTH = 8;
 
-static const uint8_t VGA_FOREGROUND_COLOUR = 7; /* standard grey */
-static const uint8_t VGA_BACKGROUND_COLOUR = 1; /* blue */
+static const uint8_t VGA_FOREGROUND_COLOUR = 10; /* standard grey */
+static const uint8_t VGA_BACKGROUND_COLOUR = 5; /* blue */
 
 static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
 

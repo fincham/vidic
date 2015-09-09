@@ -32,7 +32,7 @@ build/kernel/kernel: $(shell find include/kernel) $(shell find src/kernel) $(she
 		build/klegit/string.o \
 		build/kernel/early.o \
 		build/kernel/intel.o \
-		build/kernel/mini-printf.o \
+		build/klegit/mini-printf.o \
 		build/kernel/terminal.o \
 		build/kernel/main.o \
 		$(shell $(CC) -print-file-name=crtend.o) \

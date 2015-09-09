@@ -14,8 +14,13 @@ void main() {
     terminal_write("Installed GDT.\n\n");
 
     terminal_write("Setting up the IDT...\n");
-    /* setup_idt(); */
+    setup_idt();
     terminal_write("Installed IDT.\n");
 
     halt();
+
+    /* for (size_t index = 0; index < 4294967295; index++) {
+        terminal_write("This is a loop ");
+        terminal_hexdump(&index, sizeof(index));
+    } */    
 }

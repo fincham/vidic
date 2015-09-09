@@ -33,18 +33,56 @@ D = Operand size (0 for '16 bit', 1 for '32 bit')
 0 = Always 0
 A = Reserved
 
+IDT type and attributes byte
+----------------------------
+
++-----+-----+-----+-----+-----+-----+-----+-----+
+|  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
++-----+-----+-----+-----+-----+-----+-----+-----+
+|  P  |    DPL    |  S  |         Type          |
++-----+-----+-----+-----+-----+-----+-----+-----+
+
+P = "present" for paging
+DPL = Ring level required to run this interrupt
+S = 0 for an interrupt gate
+Type = If S is 0, the interrupt gate type:
+
+0x5 80386 32 bit task gate
+0x6 80286 16-bit interrupt gate
+0x7 80286 16-bit trap gate
+0xE 80386 32-bit interrupt gate
+0xF 80386 32-bit trap gate
+
 */
 
-typedef struct __attribute__ ((__packed__)) gdt_entry_struct {
+struct __attribute__((__packed__)) gdt_entry_struct {
     uint16_t limit_address_low_word;
     uint16_t base_address_low_word;
     uint8_t base_address_middle_byte;
     uint8_t access_flags;
     uint8_t granularity_flags_and_limit_address_high_nibble;
     uint8_t base_address_high_byte;
-} gdt_entry_t;
+};
 
-typedef struct __attribute__ ((__packed__)) tss_struct {
+struct __attribute__((__packed__)) gdt_pointer_struct {
+    uint16_t limit;
+    uint32_t base;
+};
+
+struct __attribute__((__packed__)) idt_entry_struct {
+    uint16_t offset_low_word;
+    uint16_t code_selector;
+    uint8_t zero;     
+    uint8_t type_and_attributes;
+    uint16_t offset_high_word;
+};
+
+struct __attribute__((__packed__)) idt_pointer_struct {
+    uint16_t limit;
+    uint32_t base;
+};
+
+struct __attribute__((__packed__)) tss_struct {
     uint16_t link;
     uint16_t link_h;
     uint32_t esp0;
@@ -83,15 +121,11 @@ typedef struct __attribute__ ((__packed__)) tss_struct {
     uint16_t ldt_h;
     uint16_t trap;
     uint16_t iomap;
-} tss_t;
-
-typedef struct __attribute__ ((__packed__)) gdt_pointer_struct {
-    uint16_t limit;
-    uint32_t base;
-} gdt_pointer_t;
+};
 
 void outb(unsigned int port, unsigned char byte);
 void halt();
 void setup_gdt();
+void setup_idt();
 
 #endif
