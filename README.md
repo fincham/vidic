@@ -46,7 +46,7 @@ gcc
 
     tar xfv gcc-4.9.2-dfsg.tar.xz
     cd gcc-4.9.2
-    patch -p2 < ../../debian/patches/gcc-gfdl-build.diff # disable building some of the docs that don't work on debian
+    patch -p2 < ../debian/patches/gcc-gfdl-build.diff # disable building some of the docs that don't work on debian
 
     mkdir build
     cd build/
