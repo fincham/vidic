@@ -73,4 +73,5 @@ Startup sequence
 1. main() from kernel/main.c runs
 1. Terminal is cleared and a message is printed
 1. Set up a flat mapping of the whole physical address space in the GDT
-1. CPU halts.
+1. Set up an ISR for interrupt 0x80 and call it
+1. CPU halts
