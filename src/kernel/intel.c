@@ -10,6 +10,7 @@ struct gdt_entry_struct gdt_entries[GDT_ENTRY_COUNT];
 struct idt_entry_struct idt_entries[IDT_ENTRY_COUNT];
 struct tss_struct tss;
 struct gdt_pointer_struct gdt;
+struct idt_pointer_struct idt;
 
 /* write a byte to an IO port */
 void outb(unsigned int port, unsigned char byte) {
@@ -77,31 +78,23 @@ void switch_to_gdt(struct gdt_pointer_struct* gdt) {
 }
 
 struct idt_entry_struct idt_entry(uint32_t offset, uint16_t code_selector, uint8_t type_and_attributes) {
+    struct idt_entry_struct entry;
 
+    entry.offset_low_word = offset & 0xFFFF;
+    entry.code_selector = code_selector;   
+    entry.zero = 0;
+    entry.type_and_attributes = flags | 0x60;   
+    entry.offset_high_word = (offset >> 16) & 0xFFFF;
 
-    uint16_t offset_low_word;
-    uint16_t code_selector;
-    uint8_t zero;     
-    uint8_t type_and_attributes;
-    uint16_t offset_high_word;
-
-    ENTRY(num).base_low = ((uintptr_t)base & 0xFFFF);
-    ENTRY(num).base_high = ((uintptr_t)base >> 16) & 0xFFFF;
-    ENTRY(num).sel = sel;
-    ENTRY(num).zero = 0;
-    ENTRY(num).flags = flags | 0x60;
-}
-
-void idt_install(void) {
-    idt_pointer_t * idtp = &idt.pointer;
-    idtp->limit = sizeof idt.entries - 1;
-    idtp->base = (uintptr_t)&ENTRY(0);
-    memset(&ENTRY(0), 0, sizeof idt.entries);
-
-    idt_load((uintptr_t)idtp);
+    return entry;
 }
 
 void setup_idt() {
+    idt.limit = sizeof(struct idt_entry_struct) * IDT_ENTRY_COUNT - 1;
+    idt.base = (uint32_t)&idt_entries;
+    memset(&ENTRY(0), 0, sizeof idt.entries);
+
+    idt_load((uintptr_t)idtp);    
 }
 
 void setup_gdt() {
