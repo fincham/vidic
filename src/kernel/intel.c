@@ -164,8 +164,5 @@ void setup_gdt() {
     gdt_entries[4] = gdt_entry(0, 0xFFFFFFFF, 0xF2, 0xC0); /* ring 3 code segment */
     gdt_entries[5] = gdt_entry((uint32_t)&tss, sizeof(tss), 0x89, 0xC0); /* TSS for later multitasking */
 
-    terminal_write("This GDT was built:\n");
-    terminal_hexdump(gdt_entries, sizeof(struct gdt_entry_struct) * GDT_ENTRY_COUNT);
-
     switch_to_gdt(&gdt);
 }

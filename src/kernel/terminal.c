@@ -3,6 +3,7 @@
 
 #include <kernel/intel.h>
 #include <klegit/mini-printf.h>
+#include <klegit/string.h>
 
 static const size_t VGA_HEIGHT = 25;
 static const size_t VGA_WIDTH = 80;
@@ -22,7 +23,7 @@ uint8_t vga_color(uint8_t foreground, uint8_t background)
     return foreground | background << 4;
 }
 
-/* produce two bytes to be written in to VGA memory to set a character, foreground and background color */
+/* produce two octets to be written in to VGA memory to set a character, foreground and background color */
 uint16_t vga_character(char character) {
     return character | vga_color(VGA_FOREGROUND_COLOUR, VGA_BACKGROUND_COLOUR) << 8;
 }
@@ -46,9 +47,7 @@ void vga_move_cursor(uint8_t column, uint8_t row) {
         cursor_row = VGA_HEIGHT - 1;
 
         /* scroll up VGA memory by one line */
-        for (size_t index = 0; index < VGA_HEIGHT * VGA_WIDTH + VGA_WIDTH; index++) {
-            VGA_MEMORY[index] = VGA_MEMORY[index + VGA_WIDTH];
-        }
+        memcpy(VGA_MEMORY, VGA_MEMORY + VGA_WIDTH, (VGA_HEIGHT * VGA_WIDTH - VGA_WIDTH) * 2);  
 
         /* blank the freshly exposed bottom line */
         for (size_t index = 0; index < VGA_WIDTH; index++) {
