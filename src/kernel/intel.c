@@ -107,7 +107,7 @@ void switch_to_gdt(struct gdt_pointer_struct* gdt) {
 
 void switch_to_idt(struct idt_pointer_struct* idt) {
     __asm__ volatile (
-        "lidt (%0)\n\t"
+        "lidt (%0)"
         : 
         : "r"(idt) 
         : 
