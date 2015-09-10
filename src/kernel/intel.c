@@ -3,14 +3,42 @@
 #include <kernel/intel.h>
 #include <kernel/terminal.h>
 
+#include <klegit/string.h>
+
 #define GDT_ENTRY_COUNT 6
 #define IDT_ENTRY_COUNT 256
+
+#define START_INTERRUPT_LABEL(interrupt_number)\
+__asm__ goto ( \
+    "mov $%l1, %%eax\n\t" \
+    "mov %%eax, (%%ebx)" \
+    : \
+    : "b"(&handlers[interrupt_number]) \
+    : "memory", "eax" \
+    : start_of_interrupt_handler##interrupt_number \
+); \
+__asm__ goto ( \
+    "jmp $0x8, $%l0" \
+    : \
+    : \
+    : \
+    : end_of_interrupt_handler##interrupt_number \
+); \
+start_of_interrupt_handler##interrupt_number:
+
+#define END_INTERRUPT_LABEL(interrupt_number)\
+end_of_interrupt_handler##interrupt_number:
 
 struct gdt_entry_struct gdt_entries[GDT_ENTRY_COUNT];
 struct idt_entry_struct idt_entries[IDT_ENTRY_COUNT];
 struct tss_struct tss;
 struct gdt_pointer_struct gdt;
 struct idt_pointer_struct idt;
+
+/* bochs magic breakpoint */
+void bochs_break() {
+     __asm__ volatile ("xchgw %bx, %bx");
+}
 
 /* write a byte to an IO port */
 void outb(unsigned int port, unsigned char byte) {
@@ -77,24 +105,51 @@ void switch_to_gdt(struct gdt_pointer_struct* gdt) {
     );
 }
 
+void switch_to_idt(struct idt_pointer_struct* idt) {
+    __asm__ volatile (
+        "lidt (%0)\n\t"
+        : 
+        : "r"(idt) 
+        : 
+    );
+}
+
 struct idt_entry_struct idt_entry(uint32_t offset, uint16_t code_selector, uint8_t type_and_attributes) {
     struct idt_entry_struct entry;
 
     entry.offset_low_word = offset & 0xFFFF;
     entry.code_selector = code_selector;   
     entry.zero = 0;
-    entry.type_and_attributes = flags | 0x60;   
+    entry.type_and_attributes = type_and_attributes | 0x80;   
     entry.offset_high_word = (offset >> 16) & 0xFFFF;
 
     return entry;
 }
 
 void setup_idt() {
+    uint32_t handlers[IDT_ENTRY_COUNT];
+
     idt.limit = sizeof(struct idt_entry_struct) * IDT_ENTRY_COUNT - 1;
     idt.base = (uint32_t)&idt_entries;
-    memset(&ENTRY(0), 0, sizeof idt.entries);
+    memset(&idt_entries, 0, sizeof(idt_entries));
 
-    idt_load((uintptr_t)idtp);    
+    START_INTERRUPT_LABEL(128);
+        terminal_write("Syscall interrupt fired.\n");
+        bochs_break();
+    END_INTERRUPT_LABEL(128);
+
+    /* software interrupts */
+    idt_entries[0x80] = idt_entry(handlers[0x80], 0x8, 0xe);
+
+    terminal_write("This IDT was built (first 8 entries):\n");
+    terminal_hexdump(idt_entries, sizeof(struct idt_entry_struct) * 8);
+
+    switch_to_idt(&idt);
+
+    terminal_write("Calling test interrupt...\n");
+    __asm__ volatile (
+        "int $0x80"
+    );     
 }
 
 void setup_gdt() {
