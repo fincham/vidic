@@ -154,36 +154,24 @@ struct idt_entry_struct idt_entry(uint32_t offset, uint16_t code_selector, uint8
     return entry;
 }
 
-/*
-arguments:
-    offset1 - vector offset for master PIC
-        vectors on the master become offset1..offset1+7
-    offset2 - same for slave PIC: offset2..offset2+7
-*/
-void PIC_remap(int offset1, int offset2)
-{
-    unsigned char a1, a2;
+void setup_pic() {
+    unsigned char first_pic_mask;
+    unsigned char second_pic_mask;
  
-    a1 = inb(PIC1_DATA);                        // save masks
-    a2 = inb(PIC2_DATA);
+    first_pic_mask = inb(PIC1_DATA)
+    second_pic_mask = inb(PIC2_DATA);
  
     outb(PIC1_COMMAND, ICW1_INIT+ICW1_ICW4);  // starts the initialization sequence (in cascade mode)
-
     outb(PIC2_COMMAND, ICW1_INIT+ICW1_ICW4);
 
-    outb(PIC1_DATA, offset1);                 // ICW2: Master PIC vector offset
-
-    outb(PIC2_DATA, offset2);                 // ICW2: Slave PIC vector offset
+    outb(PIC1_DATA, 0x20); /* set offset for first PIC */
+    outb(PIC2_DATA, 0x28); /* set offset for 2nd PIC */
 
     outb(PIC1_DATA, 4);                       // ICW3: tell Master PIC that there is a slave PIC at IRQ2 (0000 0100)
-
     outb(PIC2_DATA, 2);                       // ICW3: tell Slave PIC its cascade identity (0000 0010)
 
- 
     outb(PIC1_DATA, ICW4_8086);
-
     outb(PIC2_DATA, ICW4_8086);
-
  
     outb(PIC1_DATA, a1);   // restore saved masks.
     outb(PIC2_DATA, a2);
@@ -408,10 +396,12 @@ void setup_idt() {
     PIC_remap(0x20, 0x28);
 
 
-    __asm__ volatile ("sti");
+    /* __asm__ volatile ("sti");
     while (1) {
 
-    }
+    } */
+
+    __asm__ volatile ("int $0x80"); 
 
 }
 
