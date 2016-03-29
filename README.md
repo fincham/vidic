@@ -3,6 +3,9 @@ History
 
 This project has been ongoing since 2003 or so. The source has been lost and rewritten several times since then :)
 
+    16:22 <TomRyder> I'd just like to interject for a moment. What you're referring to as "Vidic" is 
+                     in fact TNU/Vidic, or as I've recently taken to calling it, TNU plus Vidic.
+
 Source directories
 ==================
 
